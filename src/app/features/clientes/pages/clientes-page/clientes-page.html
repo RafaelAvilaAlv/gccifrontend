@@ -1,0 +1,110 @@
+<div class="space-y-6">
+  <section class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800">Clientes</h2>
+      <p class="text-sm text-slate-500">Listado general de clientes registrados</p>
+    </div>
+
+    <a
+      routerLink="/clientes/nuevo"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block"
+    >
+      Nuevo cliente
+    </a>
+  </section>
+
+  <section *ngIf="loading" class="text-sm text-slate-500">
+    Cargando clientes...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section *ngIf="clientes.length > 0" class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Clientes activos</h3>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">ID</th>
+            <th class="py-3 pr-4">Nombre</th>
+            <th class="py-3 pr-4">Apellido</th>
+            <th class="py-3 pr-4">Teléfono</th>
+            <th class="py-3 pr-4">Correo</th>
+            <th class="py-3 pr-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientes" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ cliente.id }}</td>
+            <td class="py-3 pr-4">{{ cliente.nombres }}</td>
+            <td class="py-3 pr-4">{{ cliente.apellidos }}</td>
+            <td class="py-3 pr-4">{{ cliente.telefono }}</td>
+            <td class="py-3 pr-4">{{ cliente.email }}</td>
+            <td class="py-3 pr-4">
+              <div class="flex gap-2">
+                <a
+                  [routerLink]="['/clientes/editar', cliente.id]"
+                  class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-xs inline-block"
+                >
+                  Editar
+                </a>
+
+                <button
+                  (click)="desactivarCliente(cliente)"
+                  [disabled]="deletingId === cliente.id"
+                  class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                >
+                  {{ deletingId === cliente.id ? 'Desactivando...' : 'Desactivar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Clientes inactivos</h3>
+
+    <div *ngIf="clientesInactivos.length === 0" class="text-sm text-slate-500">
+      No hay clientes inactivos.
+    </div>
+
+    <div class="overflow-x-auto" *ngIf="clientesInactivos.length > 0">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">ID</th>
+            <th class="py-3 pr-4">Nombre</th>
+            <th class="py-3 pr-4">Apellido</th>
+            <th class="py-3 pr-4">Teléfono</th>
+            <th class="py-3 pr-4">Correo</th>
+            <th class="py-3 pr-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientesInactivos" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ cliente.id }}</td>
+            <td class="py-3 pr-4">{{ cliente.nombres }}</td>
+            <td class="py-3 pr-4">{{ cliente.apellidos }}</td>
+            <td class="py-3 pr-4">{{ cliente.telefono }}</td>
+            <td class="py-3 pr-4">{{ cliente.email }}</td>
+            <td class="py-3 pr-4">
+              <button
+                (click)="activarCliente(cliente)"
+                [disabled]="activatingId === cliente.id"
+                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+              >
+                {{ activatingId === cliente.id ? 'Reactivando...' : 'Reactivar' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

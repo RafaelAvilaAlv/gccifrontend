@@ -1,0 +1,106 @@
+<div class="space-y-6 max-w-4xl">
+  <section>
+    <h2 class="text-2xl font-bold text-slate-800">
+      {{ modoEdicion ? 'Editar cita' : 'Nueva cita' }}
+    </h2>
+    <p class="text-sm text-slate-500">
+      {{ modoEdicion ? 'Actualiza la información de la cita' : 'Completa la información para registrar la cita' }}
+    </p>
+  </section>
+
+  <section *ngIf="loadingData" class="text-sm text-slate-500">
+    Cargando datos del formulario...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section *ngIf="!loadingData" class="bg-white rounded-xl shadow-sm p-6">
+    <form [formGroup]="citaForm" (ngSubmit)="guardar()" class="space-y-5">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Cliente</label>
+          <select formControlName="clienteId"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500">
+            <option [ngValue]="0">Seleccione un cliente</option>
+            <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
+              {{ cliente.nombres }} {{ cliente.apellidos }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Servicio</label>
+          <select formControlName="servicioId"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500">
+            <option [ngValue]="0">Seleccione un servicio</option>
+            <option *ngFor="let servicio of servicios" [ngValue]="servicio.id">
+              {{ servicio.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Empleado</label>
+          <select formControlName="usuarioId"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500">
+            <option [ngValue]="0">Seleccione un empleado</option>
+            <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
+              {{ nombreUsuario(usuario) }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Fecha</label>
+          <input type="date" formControlName="fecha"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Hora inicio</label>
+          <input type="time" formControlName="horaInicio"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Hora fin</label>
+          <input type="time" formControlName="horaFin"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Precio final</label>
+          <input type="number" step="0.01" formControlName="precioFinal"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
+        <textarea rows="4" formControlName="observaciones"
+          class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <div *ngIf="success" class="text-sm text-green-600">
+        {{ success }}
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button type="submit" [disabled]="loading"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
+          {{ loading ? (modoEdicion ? 'Actualizando...' : 'Guardando...') : (modoEdicion ? 'Actualizar cita' : 'Guardar cita') }}
+        </button>
+
+        <button type="button" (click)="cancelar()"
+          class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-2 rounded-lg text-sm font-medium">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

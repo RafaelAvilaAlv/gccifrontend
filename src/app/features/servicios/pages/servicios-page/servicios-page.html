@@ -1,0 +1,140 @@
+<div class="space-y-6">
+
+    <!-- HEADER -->
+    <section class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">Servicios</h2>
+            <p class="text-sm text-slate-500">Listado general de servicios registrados</p>
+        </div>
+
+        <a routerLink="/servicios/nuevo"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block">
+            Nuevo servicio
+        </a>
+    </section>
+
+    <!-- LOADING -->
+    <section *ngIf="loading" class="text-sm text-slate-500">
+        Cargando servicios...
+    </section>
+
+    <!-- ERROR -->
+    <section *ngIf="error" class="text-sm text-red-600">
+        {{ error }}
+    </section>
+
+    <!-- ========================= -->
+    <!-- SERVICIOS ACTIVOS -->
+    <!-- ========================= -->
+    <section *ngIf="!loading && serviciosActivos.length > 0"
+        class="bg-white rounded-xl shadow-sm p-5">
+
+        <h3 class="text-lg font-semibold mb-4 text-slate-700">
+            Servicios activos
+        </h3>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead>
+                    <tr class="border-b text-left text-slate-500">
+                        <th class="py-3 pr-4">ID</th>
+                        <th class="py-3 pr-4">Nombre</th>
+                        <th class="py-3 pr-4">Descripción</th>
+                        <th class="py-3 pr-4">Precio base</th>
+                        <th class="py-3 pr-4">Duración</th>
+                        <th class="py-3 pr-4">Estado</th>
+                        <th class="py-3 pr-4">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let servicio of serviciosActivos" class="border-b last:border-b-0">
+                        <td class="py-3 pr-4">{{ servicio.id }}</td>
+                        <td class="py-3 pr-4">{{ servicio.nombre }}</td>
+                        <td class="py-3 pr-4">{{ servicio.descripcion }}</td>
+                        <td class="py-3 pr-4">{{ servicio.precioBase | currency:'USD':'symbol':'1.2-2' }}</td>
+                        <td class="py-3 pr-4">{{ servicio.duracionMinutos }} min</td>
+
+                        <td class="py-3 pr-4">
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">
+                                Activo
+                            </span>
+                        </td>
+
+                        <td class="py-3 pr-4">
+                            <div class="flex gap-2">
+
+                                <!-- EDITAR -->
+                                <a [routerLink]="['/servicios/editar', servicio.id]"
+                                    class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-xs inline-block">
+                                    Editar
+                                </a>
+
+                                <!-- DESACTIVAR -->
+                                <button (click)="desactivarServicio(servicio)"
+                                    [disabled]="deletingId === servicio.id"
+                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs disabled:opacity-50">
+
+                                    {{ deletingId === servicio.id ? 'Desactivando...' : 'Desactivar' }}
+
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- SERVICIOS INACTIVOS -->
+    <!-- ========================= -->
+    <section *ngIf="!loading && serviciosInactivos.length > 0"
+        class="bg-white rounded-xl shadow-sm p-5">
+
+        <h3 class="text-lg font-semibold mb-4 text-slate-700">
+            Servicios inactivos
+        </h3>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead>
+                    <tr class="border-b text-left text-slate-500">
+                        <th class="py-3 pr-4">ID</th>
+                        <th class="py-3 pr-4">Nombre</th>
+                        <th class="py-3 pr-4">Descripción</th>
+                        <th class="py-3 pr-4">Precio base</th>
+                        <th class="py-3 pr-4">Duración</th>
+                        <th class="py-3 pr-4">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let servicio of serviciosInactivos" class="border-b last:border-b-0">
+                        <td class="py-3 pr-4">{{ servicio.id }}</td>
+                        <td class="py-3 pr-4">{{ servicio.nombre }}</td>
+                        <td class="py-3 pr-4">{{ servicio.descripcion }}</td>
+                        <td class="py-3 pr-4">{{ servicio.precioBase | currency:'USD':'symbol':'1.2-2' }}</td>
+                        <td class="py-3 pr-4">{{ servicio.duracionMinutos }} min</td>
+
+                        <td class="py-3 pr-4">
+                            <button (click)="activarServicio(servicio)"
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs">
+
+                                Reactivar
+
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- VACÍO -->
+    <section *ngIf="!loading && serviciosActivos.length === 0 && serviciosInactivos.length === 0"
+        class="bg-white rounded-xl shadow-sm p-6 text-sm text-slate-500">
+        No hay servicios registrados.
+    </section>
+
+</div>

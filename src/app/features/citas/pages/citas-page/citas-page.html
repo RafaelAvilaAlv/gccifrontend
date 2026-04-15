@@ -1,0 +1,89 @@
+<div class="space-y-6">
+  <section class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800">Citas</h2>
+      <p class="text-sm text-slate-500">Listado general de citas registradas</p>
+    </div>
+
+    <a routerLink="/citas/nueva"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-block">
+      Nueva cita
+    </a>
+  </section>
+
+  <section *ngIf="loading" class="text-sm text-slate-500">
+    Cargando citas...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section *ngIf="!loading && citas.length === 0" class="bg-white rounded-xl shadow-sm p-6 text-sm text-slate-500">
+    No hay citas registradas.
+  </section>
+
+  <section *ngIf="citas.length > 0" class="bg-white rounded-xl shadow-sm p-5">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">ID</th>
+            <th class="py-3 pr-4">Cliente</th>
+            <th class="py-3 pr-4">Servicio</th>
+            <th class="py-3 pr-4">Empleado</th>
+            <th class="py-3 pr-4">Fecha</th>
+            <th class="py-3 pr-4">Hora inicio</th>
+            <th class="py-3 pr-4">Hora fin</th>
+            <th class="py-3 pr-4">Estado</th>
+            <th class="py-3 pr-4">Precio final</th>
+            <th class="py-3 pr-4">Observaciones</th>
+            <th class="py-3 pr-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citas" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ cita.id }}</td>
+            <td class="py-3 pr-4">{{ cita.nombreCliente }}</td>
+            <td class="py-3 pr-4">{{ cita.nombreServicio }}</td>
+            <td class="py-3 pr-4">{{ cita.nombreUsuario }}</td>
+            <td class="py-3 pr-4">{{ cita.fecha | date:'dd/MM/yyyy' }}</td>
+            <td class="py-3 pr-4">{{ cita.horaInicio.slice(0, 5) }}</td>
+            <td class="py-3 pr-4">{{ cita.horaFin.slice(0, 5) }}</td>
+            <td class="py-3 pr-4">
+              <span class="px-2 py-1 rounded text-xs font-medium" [ngClass]="getEstadoClase(cita.estado)">
+                {{ cita.estado }}
+              </span>
+            </td>
+            <td class="py-3 pr-4">{{ cita.precioFinal | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td class="py-3 pr-4">{{ cita.observaciones || '-' }}</td>
+            <td class="py-3 pr-4">
+              <div class="flex gap-2">
+                <a *ngIf="puedeEditar(cita)" [routerLink]="['/citas/editar', cita.id]"
+                  class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-xs inline-block">
+                  Editar
+                </a>
+
+                <span *ngIf="!puedeEditar(cita)" class="bg-slate-200 text-slate-700 px-3 py-1 rounded text-xs">
+                  Bloqueada
+                </span>
+
+                <button *ngIf="puedeGestionarEstado(cita)" type="button" (click)="abrirModalEstado(cita)"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">
+                  Estado
+                </button>
+
+                <span *ngIf="!puedeGestionarEstado(cita)" class="bg-slate-200 text-slate-700 px-3 py-1 rounded text-xs">
+                  Cerrada
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <app-cita-estado-modal *ngIf="mostrarModalEstado" [cita]="citaSeleccionada" [loading]="guardandoEstado"
+    (cerrar)="cerrarModalEstado()" (guardar)="guardarNuevoEstado($event)"></app-cita-estado-modal>
+</div>

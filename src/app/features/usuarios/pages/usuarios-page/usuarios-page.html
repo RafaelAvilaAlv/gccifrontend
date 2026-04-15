@@ -1,0 +1,138 @@
+<div class="space-y-6">
+  <section class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800">Usuarios</h2>
+      <p class="text-sm text-slate-500">Listado general de usuarios del sistema</p>
+    </div>
+
+    <button
+      (click)="nuevoUsuario()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+    >
+      Nuevo usuario
+    </button>
+  </section>
+
+  <section *ngIf="loading" class="text-sm text-slate-500">
+    Cargando usuarios...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section
+    *ngIf="!loading && usuarios.length === 0"
+    class="bg-white rounded-xl shadow-sm p-6 text-sm text-slate-500"
+  >
+    No hay usuarios registrados.
+  </section>
+
+  <section *ngIf="usuariosActivos.length > 0" class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Usuarios activos</h3>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">ID</th>
+            <th class="py-3 pr-4">Nombre</th>
+            <th class="py-3 pr-4">Apellido</th>
+            <th class="py-3 pr-4">Email</th>
+            <th class="py-3 pr-4">Rol</th>
+            <th class="py-3 pr-4">Estado</th>
+            <th class="py-3 pr-4">Fecha creación</th>
+            <th class="py-3 pr-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuariosActivos" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ usuario.id }}</td>
+            <td class="py-3 pr-4">{{ usuario.nombre }}</td>
+            <td class="py-3 pr-4">{{ usuario.apellido }}</td>
+            <td class="py-3 pr-4">{{ usuario.email }}</td>
+            <td class="py-3 pr-4">{{ usuario.rol }}</td>
+            <td class="py-3 pr-4">
+              <span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">
+                Activo
+              </span>
+            </td>
+            <td class="py-3 pr-4">{{ usuario.fechaCreacion || '-' }}</td>
+            <td class="py-3 pr-4">
+              <div class="flex flex-wrap gap-2">
+                <button
+                  (click)="editar(usuario)"
+                  class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-xs"
+                >
+                  Editar
+                </button>
+
+                <button
+                  (click)="desactivar(usuario)"
+                  [disabled]="changingId === usuario.id"
+                  class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                >
+                  {{ changingId === usuario.id ? 'Procesando...' : 'Desactivar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section *ngIf="usuariosInactivos.length > 0" class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Usuarios inactivos</h3>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">ID</th>
+            <th class="py-3 pr-4">Nombre</th>
+            <th class="py-3 pr-4">Apellido</th>
+            <th class="py-3 pr-4">Email</th>
+            <th class="py-3 pr-4">Rol</th>
+            <th class="py-3 pr-4">Estado</th>
+            <th class="py-3 pr-4">Fecha creación</th>
+            <th class="py-3 pr-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuariosInactivos" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ usuario.id }}</td>
+            <td class="py-3 pr-4">{{ usuario.nombre }}</td>
+            <td class="py-3 pr-4">{{ usuario.apellido }}</td>
+            <td class="py-3 pr-4">{{ usuario.email }}</td>
+            <td class="py-3 pr-4">{{ usuario.rol }}</td>
+            <td class="py-3 pr-4">
+              <span class="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-700">
+                Inactivo
+              </span>
+            </td>
+            {{ usuario.fechaCreacion ? (usuario.fechaCreacion | date:'dd/MM/yyyy HH:mm') : '-' }}
+            <td class="py-3 pr-4">
+              <div class="flex flex-wrap gap-2">
+                <button
+                  (click)="editar(usuario)"
+                  class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded text-xs"
+                >
+                  Editar
+                </button>
+
+                <button
+                  (click)="reactivar(usuario)"
+                  [disabled]="changingId === usuario.id"
+                  class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs disabled:opacity-50"
+                >
+                  {{ changingId === usuario.id ? 'Procesando...' : 'Reactivar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

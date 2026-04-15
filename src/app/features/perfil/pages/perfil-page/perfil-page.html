@@ -1,0 +1,124 @@
+<div class="space-y-6 max-w-5xl">
+  <section>
+    <h2 class="text-2xl font-bold text-slate-800">Perfil</h2>
+    <p class="text-sm text-slate-500">
+      Consulta tu información personal y cambia tu contraseña
+    </p>
+  </section>
+
+  <section *ngIf="loading" class="text-sm text-slate-500">
+    Cargando perfil...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <ng-container *ngIf="!loading && usuario">
+    <section class="bg-white rounded-xl shadow-sm p-6">
+      <h3 class="text-lg font-semibold text-slate-800 mb-4">
+        Información del usuario
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-slate-500">Nombre</p>
+          <p class="font-medium text-slate-800 mt-1">{{ usuario.nombre }}</p>
+        </div>
+
+        <div>
+          <p class="text-slate-500">Apellido</p>
+          <p class="font-medium text-slate-800 mt-1">{{ usuario.apellido }}</p>
+        </div>
+
+        <div>
+          <p class="text-slate-500">Email</p>
+          <p class="font-medium text-slate-800 mt-1">{{ usuario.email }}</p>
+        </div>
+
+        <div>
+          <p class="text-slate-500">Rol</p>
+          <p class="font-medium text-slate-800 mt-1">{{ usuario.rol }}</p>
+        </div>
+
+        <div>
+          <p class="text-slate-500">Estado</p>
+          <span
+            class="inline-block mt-1 px-2 py-1 rounded text-xs font-medium"
+            [ngClass]="estadoClase"
+          >
+            {{ estadoTexto }}
+          </span>
+        </div>
+
+        <div>
+          <p class="text-slate-500">Fecha de creación</p>
+          <p class="font-medium text-slate-800 mt-1">
+            {{ usuario.fechaCreacion || '-' }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow-sm p-6">
+      <h3 class="text-lg font-semibold text-slate-800 mb-4">
+        Cambiar contraseña
+      </h3>
+
+      <form
+        [formGroup]="passwordForm"
+        (ngSubmit)="cambiarPassword()"
+        class="space-y-4"
+      >
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">
+            Contraseña actual
+          </label>
+          <input
+            type="password"
+            formControlName="passwordActual"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+              Nueva contraseña
+            </label>
+            <input
+              type="password"
+              formControlName="nuevaPassword"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+              Confirmar nueva contraseña
+            </label>
+            <input
+              type="password"
+              formControlName="confirmarPassword"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div *ngIf="success" class="text-sm text-green-600">
+          {{ success }}
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            [disabled]="changingPassword"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+          >
+            {{ changingPassword ? 'Actualizando...' : 'Actualizar contraseña' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </ng-container>
+</div>

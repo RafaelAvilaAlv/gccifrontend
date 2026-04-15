@@ -1,0 +1,20 @@
+<header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+  <div>
+    <h1 class="text-xl font-semibold text-gray-800">Panel de control</h1>
+    <p class="text-sm text-gray-500">Bienvenido al sistema</p>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <div class="text-right">
+      <p class="text-sm font-medium text-gray-700">{{ email }}</p>
+      <p class="text-xs text-gray-500">{{ rol }}</p>
+    </div>
+
+    <button
+      (click)="logout()"
+      class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+    >
+      Cerrar sesión
+    </button>
+  </div>
+</header>

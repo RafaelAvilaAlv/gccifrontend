@@ -1,0 +1,94 @@
+<div class="space-y-6 max-w-3xl">
+    <section>
+        <h2 class="text-2xl font-bold text-slate-800">
+            {{ editando ? 'Editar cliente' : 'Nuevo cliente' }}
+        </h2>
+        <p class="text-sm text-slate-500">
+            {{ editando ? 'Actualiza la información del cliente' : 'Completa la información del cliente' }}
+        </p>
+    </section>
+
+    <section class="bg-white rounded-xl shadow-sm p-6">
+        <form [formGroup]="clienteForm" (ngSubmit)="guardar()" class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nombres</label>
+                    <input type="text" formControlName="nombres"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p *ngIf="clienteForm.controls.nombres.touched && clienteForm.controls.nombres.invalid"
+                        class="text-sm text-red-500 mt-1">
+                        Los nombres son obligatorios.
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Apellidos</label>
+                    <input type="text" formControlName="apellidos"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p *ngIf="clienteForm.controls.apellidos.touched && clienteForm.controls.apellidos.invalid"
+                        class="text-sm text-red-500 mt-1">
+                        Los apellidos son obligatorios.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
+                    <input type="text" formControlName="telefono"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p *ngIf="clienteForm.controls.telefono.touched && clienteForm.controls.telefono.invalid"
+                        class="text-sm text-red-500 mt-1">
+                        El teléfono es obligatorio.
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Correo</label>
+                    <input type="email" formControlName="email"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p *ngIf="clienteForm.controls.email.touched && clienteForm.controls.email.invalid"
+                        class="text-sm text-red-500 mt-1">
+                        Ingresa un correo válido.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Dirección</label>
+                <input type="text" formControlName="direccion"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500" />
+                <p *ngIf="clienteForm.controls.direccion.touched && clienteForm.controls.direccion.invalid"
+                    class="text-sm text-red-500 mt-1">
+                    La dirección es obligatoria.
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
+                <textarea rows="3" formControlName="observaciones"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <div *ngIf="error" class="text-sm text-red-600">
+                {{ error }}
+            </div>
+
+            <div *ngIf="success" class="text-sm text-green-600">
+                {{ success }}
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button type="submit" [disabled]="loading"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
+                    {{ loading ? 'Guardando...' : 'Guardar cliente' }}
+                </button>
+
+                <button type="button" (click)="cancelar()"
+                    class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-2 rounded-lg text-sm font-medium">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </section>
+</div>

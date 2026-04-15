@@ -1,0 +1,71 @@
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-4">
+  <h2 class="text-xl font-bold mb-6">GCCI</h2>
+
+  <nav class="space-y-2">
+
+    <!-- Dashboard -->
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Dashboard
+    </a>
+
+    <!-- Clientes -->
+    <a
+      routerLink="/clientes"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Clientes
+    </a>
+
+    <!-- Servicios -->
+    <a
+      routerLink="/servicios"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Servicios
+    </a>
+
+    <!-- Citas -->
+    <a
+      routerLink="/citas"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Citas
+    </a>
+
+    <!-- Pagos -->
+    <a
+      routerLink="/pagos"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Pagos
+    </a>
+
+    <!-- 🔒 SOLO ADMIN -->
+    <a
+      *ngIf="esAdmin"
+      routerLink="/usuarios"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Usuarios
+    </a>
+
+    <!-- Perfil -->
+    <a
+      routerLink="/perfil"
+      routerLinkActive="bg-slate-700"
+      class="block px-4 py-2 rounded-lg hover:bg-slate-800 transition"
+    >
+      Perfil
+    </a>
+
+  </nav>
+</aside>

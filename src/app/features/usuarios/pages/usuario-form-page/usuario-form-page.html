@@ -1,0 +1,148 @@
+<div class="space-y-6 max-w-3xl">
+  <section>
+    <h2 class="text-2xl font-bold text-slate-800">
+      {{ editando ? 'Editar usuario' : 'Nuevo usuario' }}
+    </h2>
+    <p class="text-sm text-slate-500">
+      {{ editando ? 'Actualiza la información del usuario' : 'Completa la información del nuevo usuario' }}
+    </p>
+  </section>
+
+  <section *ngIf="error && loadingData" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <ng-container *ngIf="loadingData; else formularioUsuario">
+    <section class="text-sm text-slate-500">
+      Cargando información del usuario...
+    </section>
+  </ng-container>
+
+  <ng-template #formularioUsuario>
+    <section class="bg-white rounded-xl shadow-sm p-6">
+      <form [formGroup]="usuarioForm" (ngSubmit)="guardar()" class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Nombre</label>
+            <input
+              type="text"
+              formControlName="nombre"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p
+              *ngIf="usuarioForm.controls.nombre.touched && usuarioForm.controls.nombre.invalid"
+              class="text-sm text-red-500 mt-1"
+            >
+              El nombre es obligatorio y debe tener al menos 2 caracteres.
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Apellido</label>
+            <input
+              type="text"
+              formControlName="apellido"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p
+              *ngIf="usuarioForm.controls.apellido.touched && usuarioForm.controls.apellido.invalid"
+              class="text-sm text-red-500 mt-1"
+            >
+              El apellido es obligatorio y debe tener al menos 2 caracteres.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Correo electrónico</label>
+            <input
+              type="email"
+              formControlName="email"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p
+              *ngIf="usuarioForm.controls.email.touched && usuarioForm.controls.email.invalid"
+              class="text-sm text-red-500 mt-1"
+            >
+              Ingresa un correo válido.
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Rol</label>
+            <select
+              formControlName="rol"
+              class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option *ngFor="let rol of roles" [value]="rol">
+                {{ rol }}
+              </option>
+            </select>
+            <p
+              *ngIf="usuarioForm.controls.rol.touched && usuarioForm.controls.rol.invalid"
+              class="text-sm text-red-500 mt-1"
+            >
+              El rol es obligatorio.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">
+            {{ editando ? 'Nueva contraseña (opcional)' : 'Contraseña' }}
+          </label>
+          <input
+            type="password"
+            formControlName="password"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p class="text-xs text-slate-500 mt-1">
+            {{ passwordHint }}
+          </p>
+          <p
+            *ngIf="usuarioForm.controls.password.touched && usuarioForm.controls.password.invalid"
+            class="text-sm text-red-500 mt-1"
+          >
+            La contraseña debe tener al menos 8 caracteres.
+          </p>
+        </div>
+
+        <div>
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" formControlName="activo" />
+            Usuario activo
+          </label>
+        </div>
+
+        <div *ngIf="error && !loadingData" class="text-sm text-red-600">
+          {{ error }}
+        </div>
+
+        <div *ngIf="success" class="text-sm text-green-600">
+          {{ success }}
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button
+            type="submit"
+            [disabled]="loading"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+          >
+            {{ loading ? 'Guardando...' : (editando ? 'Actualizar usuario' : 'Guardar usuario') }}
+          </button>
+
+          <button
+            type="button"
+            (click)="cancelar()"
+            class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-2 rounded-lg text-sm font-medium"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+  </ng-template>
+</div>
+
+

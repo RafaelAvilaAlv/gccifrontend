@@ -1,0 +1,70 @@
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 space-y-5">
+
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="text-xl font-bold text-slate-800">Cambiar estado de cita</h3>
+        <p class="text-sm text-slate-500">Gestiona el flujo de la cita seleccionada</p>
+      </div>
+
+      <button
+        type="button"
+        (click)="onCerrar()"
+        class="text-slate-500 hover:text-slate-700 text-lg"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div *ngIf="cita" class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
+      <div><span class="font-semibold">Cliente:</span> {{ cita.nombreCliente }}</div>
+      <div><span class="font-semibold">Servicio:</span> {{ cita.nombreServicio }}</div>
+      <div><span class="font-semibold">Empleado:</span> {{ cita.nombreUsuario }}</div>
+      <div><span class="font-semibold">Fecha:</span> {{ cita.fecha }}</div>
+      <div><span class="font-semibold">Hora:</span> {{ cita.horaInicio }} - {{ cita.horaFin }}</div>
+      <div>
+        <span class="font-semibold">Estado actual:</span>
+        <span class="ml-2 px-2 py-1 rounded text-xs font-medium bg-slate-200 text-slate-700">
+          {{ cita.estado }}
+        </span>
+      </div>
+    </div>
+
+    <div *ngIf="flujoCerrado" class="text-sm text-amber-700 bg-amber-50 rounded-lg p-3">
+      Esta cita ya está cerrada y no permite más cambios de estado.
+    </div>
+
+    <div *ngIf="!flujoCerrado" class="space-y-2">
+      <label class="block text-sm font-medium text-slate-700">Nuevo estado</label>
+      <select
+        [(ngModel)]="estadoSeleccionado"
+        class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Seleccione un estado</option>
+        <option *ngFor="let estado of estadosDisponibles" [value]="estado">
+          {{ estado }}
+        </option>
+      </select>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-2">
+      <button
+        type="button"
+        (click)="onCerrar()"
+        class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm font-medium"
+      >
+        Cerrar
+      </button>
+
+      <button
+        *ngIf="!flujoCerrado"
+        type="button"
+        (click)="onGuardar()"
+        [disabled]="!estadoSeleccionado || loading"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+      >
+        {{ loading ? 'Guardando...' : 'Guardar cambio' }}
+      </button>
+    </div>
+  </div>
+</div>

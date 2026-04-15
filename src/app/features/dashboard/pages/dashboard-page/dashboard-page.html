@@ -1,0 +1,154 @@
+<div class="space-y-6">
+  <section>
+    <h2 class="text-2xl font-bold text-slate-800">Dashboard</h2>
+    <p class="text-sm text-slate-500">Resumen general del negocio</p>
+  </section>
+
+  <section *ngIf="loading" class="text-sm text-slate-500">
+    Cargando dashboard...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section *ngIf="resumen" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Citas hoy</p>
+      <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ resumen.citasHoy }}</h3>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Clientes activos</p>
+      <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ resumen.clientesActivos }}</h3>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Usuarios activos</p>
+      <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ resumen.usuariosActivos }}</h3>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Servicios activos</p>
+      <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ resumen.serviciosActivos }}</h3>
+    </div>
+  </section>
+
+  <section *ngIf="ingresos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Ingresos de hoy</p>
+      <h3 class="text-3xl font-bold text-emerald-600 mt-2">{{ ingresos.ingresosHoy | currency:'USD':'symbol':'1.2-2' }}
+      </h3>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <p class="text-sm text-slate-500">Ingresos del mes</p>
+      <h3 class="text-3xl font-bold text-emerald-600 mt-2">{{ ingresos.ingresosMes | currency:'USD':'symbol':'1.2-2' }}
+      </h3>
+    </div>
+  </section>
+
+  <section *ngIf="resumen" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <p class="text-sm text-slate-500">Pendientes</p>
+      <p class="text-2xl font-bold text-amber-500 mt-2">{{ resumen.citasPendientes }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <p class="text-sm text-slate-500">Confirmadas</p>
+      <p class="text-2xl font-bold text-blue-600 mt-2">{{ resumen.citasConfirmadas }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <p class="text-sm text-slate-500">Completadas</p>
+      <p class="text-2xl font-bold text-green-600 mt-2">{{ resumen.citasCompletadas }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <p class="text-sm text-slate-500">Canceladas</p>
+      <p class="text-2xl font-bold text-red-600 mt-2">{{ resumen.citasCanceladas }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <p class="text-sm text-slate-500">No asistió</p>
+      <p class="text-2xl font-bold text-slate-700 mt-2">{{ resumen.citasNoAsistio }}</p>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <h3 class="text-lg font-semibold text-slate-800 mb-4">Citas por estado</h3>
+
+      <div class="h-72" *ngIf="citasEstado.length > 0">
+        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'">
+        </canvas>
+      </div>
+
+      <div *ngIf="citasEstado.length === 0" class="text-sm text-slate-500">
+        No hay datos disponibles.
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-5">
+      <h3 class="text-lg font-semibold text-slate-800 mb-4">Servicios más solicitados</h3>
+
+      <div *ngIf="serviciosTop.length === 0" class="text-sm text-slate-500">
+        No hay datos disponibles.
+      </div>
+
+      <div class="space-y-3" *ngIf="serviciosTop.length > 0">
+        <div *ngFor="let servicio of serviciosTop"
+          class="flex items-center justify-between border-b last:border-b-0 pb-2">
+          <span class="text-slate-600">{{ servicio.nombreServicio }}</span>
+          <span class="font-semibold text-slate-800">{{ servicio.total }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Ingresos últimos 7 días</h3>
+
+    <div class="h-80" *ngIf="ingresosUltimos7Dias.length > 0">
+      <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
+      </canvas>
+    </div>
+
+    <div *ngIf="ingresosUltimos7Dias.length === 0" class="text-sm text-slate-500">
+      No hay datos disponibles.
+    </div>
+  </section>
+
+  <section class="bg-white rounded-xl shadow-sm p-5">
+    <h3 class="text-lg font-semibold text-slate-800 mb-4">Próximas citas</h3>
+
+    <div *ngIf="proximasCitas.length === 0" class="text-sm text-slate-500">
+      No hay próximas citas registradas.
+    </div>
+
+    <div class="overflow-x-auto" *ngIf="proximasCitas.length > 0">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b text-left text-slate-500">
+            <th class="py-3 pr-4">Cliente</th>
+            <th class="py-3 pr-4">Servicio</th>
+            <th class="py-3 pr-4">Empleado</th>
+            <th class="py-3 pr-4">Fecha</th>
+            <th class="py-3 pr-4">Hora</th>
+            <th class="py-3 pr-4">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of proximasCitas" class="border-b last:border-b-0">
+            <td class="py-3 pr-4">{{ cita.nombreCliente }}</td>
+            <td class="py-3 pr-4">{{ cita.nombreServicio }}</td>
+            <td class="py-3 pr-4">{{ cita.nombreUsuario }}</td>
+            <td class="py-3 pr-4">{{ cita.fecha | date:'dd/MM/yyyy' }}</td>
+            {{ cita.horaInicio.slice(0, 5) }}
+            <td class="py-3 pr-4">{{ cita.estado }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

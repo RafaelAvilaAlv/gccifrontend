@@ -1,0 +1,111 @@
+<div class="space-y-6 max-w-4xl">
+  <section>
+    <h2 class="text-2xl font-bold text-slate-800">Nuevo pago</h2>
+    <p class="text-sm text-slate-500">Registra un pago para una cita completada</p>
+  </section>
+
+  <section *ngIf="loadingData" class="text-sm text-slate-500">
+    Cargando datos del formulario...
+  </section>
+
+  <section *ngIf="error" class="text-sm text-red-600">
+    {{ error }}
+  </section>
+
+  <section *ngIf="!loadingData && citasDisponibles.length === 0" class="bg-white rounded-xl shadow-sm p-6 text-sm text-slate-500">
+    No hay citas completadas disponibles para registrar pago.
+  </section>
+
+  <section *ngIf="!loadingData && citasDisponibles.length > 0" class="bg-white rounded-xl shadow-sm p-6">
+    <form [formGroup]="pagoForm" (ngSubmit)="guardar()" class="space-y-5">
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Cita</label>
+        <select
+          formControlName="citaId"
+          (change)="onCitaChange()"
+          class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option [ngValue]="0">Seleccione una cita</option>
+          <option *ngFor="let cita of citasDisponibles" [ngValue]="cita.id">
+            {{ descripcionCita(cita) }}
+          </option>
+        </select>
+      </div>
+
+      <div *ngIf="citaSeleccionada" class="bg-slate-50 rounded-lg p-4 text-sm space-y-2">
+        <div><span class="font-semibold">Cliente:</span> {{ citaSeleccionada.nombreCliente }}</div>
+        <div><span class="font-semibold">Servicio:</span> {{ citaSeleccionada.nombreServicio }}</div>
+        <div><span class="font-semibold">Empleado:</span> {{ citaSeleccionada.nombreUsuario }}</div>
+        <div><span class="font-semibold">Fecha:</span> {{ citaSeleccionada.fecha }}</div>
+        <div><span class="font-semibold">Horario:</span> {{ citaSeleccionada.horaInicio }} - {{ citaSeleccionada.horaFin }}</div>
+        <div><span class="font-semibold">Precio final de la cita:</span> $ {{ citaSeleccionada.precioFinal }}</div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Monto</label>
+          <input
+            type="number"
+            step="0.01"
+            formControlName="monto"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Método de pago</label>
+          <select
+            formControlName="metodoPago"
+            class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Seleccione un método</option>
+            <option *ngFor="let metodo of metodosPago" [value]="metodo">
+              {{ metodo }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Referencia</label>
+        <input
+          type="text"
+          formControlName="referencia"
+          class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Observación</label>
+        <textarea
+          rows="4"
+          formControlName="observacion"
+          class="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+        ></textarea>
+      </div>
+
+      <div *ngIf="success" class="text-sm text-green-600">
+        {{ success }}
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-medium disabled:opacity-50"
+        >
+          {{ loading ? 'Guardando...' : 'Registrar pago' }}
+        </button>
+
+        <button
+          type="button"
+          (click)="cancelar()"
+          class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-2 rounded-lg text-sm font-medium"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </section>
+</div>
